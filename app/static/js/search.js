@@ -87,10 +87,22 @@
     }).catch(function (err) { console.warn('[Fav]', err); });
   }
 
+  function removeRecent(q) {
+    var list = getRecent().filter(function (x) { return x !== q; });
+    try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch (e) {}
+    renderRecent();
+    showToast('Removed: ' + q);
+  }
+
+  function clearAllRecent() {
+    try { localStorage.removeItem(RECENT_KEY); } catch (e) {}
+    renderRecent();
+    showToast('History cleared');
+  }
+
   function renderRecent() {
     var el = $('#recent-list');
     var section = $('#recent-section');
-    var actions = $('#quick-actions');
     if (!el || !section) return;
     var list = getRecent();
     if (!list.length) {
@@ -99,13 +111,24 @@
     }
     section.hidden = false;
     el.innerHTML = list.map(function (q) {
-      return '<button type="button" class="recent-item" data-recent="' + esc(q) + '">' + esc(q) + '</button>';
+      return '<div class="recent-item-wrap">' +
+        '<button type="button" class="recent-item" data-recent="' + esc(q) + '">' + esc(q) + '</button>' +
+        '<button type="button" class="recent-del" data-del="' + esc(q) + '" aria-label="Remove">×</button>' +
+        '</div>';
     }).join('');
+
     el.querySelectorAll('[data-recent]').forEach(function (b) {
       b.addEventListener('click', function () {
         var q = b.getAttribute('data-recent');
         var input = $('#search-input');
         if (input) { input.value = q; doSearch(q); }
+      });
+    });
+
+    el.querySelectorAll('[data-del]').forEach(function (b) {
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        removeRecent(b.getAttribute('data-del'));
       });
     });
   }
@@ -472,7 +495,28 @@
     renderFavorites();
   }
 
+  function bindClearRecent() {
+    var btn = $('#btn-clear-recent');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      if (!getRecent().length) return;
+      if (window.MH_MODAL) {
+        window.MH_MODAL.confirm({
+          icon: '🗑',
+          variant: 'danger',
+          title: 'History ဖျက်မယ်',
+          desc: 'Recent searches အားလုံး ဖျက်မှာ သေချာလား?',
+          cancelText: 'Cancel',
+          confirmText: 'Clear',
+        }).then(function (ok) { if (ok) clearAllRecent(); });
+      } else {
+        if (confirm('Clear all history?')) clearAllRecent();
+      }
+    });
+  }
+
   function bindUI() {
+    bindClearRecent();
     var fileInput = $('#file-input');
     var pickBtn = $('#btn-pick-file');
 

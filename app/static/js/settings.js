@@ -133,6 +133,27 @@
       });
     }
 
+    var clearHistBtn = $('#btn-clear-history');
+    if (clearHistBtn) {
+      clearHistBtn.addEventListener('click', function () {
+        var ask = window.MH_MODAL
+          ? window.MH_MODAL.confirm({
+              icon: '🗑',
+              variant: 'danger',
+              title: 'Search History ဖျက်မယ်',
+              desc: 'Recent searches အားလုံး ဖျက်မှာ သေချာလား?',
+              cancelText: 'Cancel',
+              confirmText: 'Clear',
+            })
+          : Promise.resolve(confirm('Clear history?'));
+        ask.then(function (ok) {
+          if (!ok) return;
+          try { localStorage.removeItem('mh_recent'); } catch (e) {}
+          showToast('✅ History cleared');
+        });
+      });
+    }
+
     var clearBtn = $('#btn-clear');
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {

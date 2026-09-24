@@ -70,8 +70,11 @@
 
     <!-- Recent (shown when no query) -->
     <div id="recent-section">
-      <h2 class="section-title">Recent Searches</h2>
-      <div id="recent-list" class="recent-list"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <h2 class="section-title" style="margin-bottom:0;">Recent Searches</h2>
+        <button type="button" class="link-btn" id="btn-clear-recent" style="font-size:11px;">Clear All</button>
+      </div>
+      <div id="recent-list" class="recent-list" style="margin-top:12px;"></div>
     </div>
 
     <!-- Quick actions -->
