@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Search — Machine Hub{% endblock %}
+
+{% block content %}
+<div class="app">
+  <header class="header">
+    <a href="/" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Search</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="search-box search-box-inline">
+    <svg class="icon search-icon"><use href="#i-search"/></svg>
+    <input type="text" id="search-input" placeholder="ရှာပါ..." autocomplete="off" autofocus>
+  </div>
+
+  <div id="results"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+<!-- Import Preview Modal -->
+<div class="mh-modal" id="preview-modal" hidden>
+  <div class="mh-modal-card" style="max-width:480px;">
+    <div class="mh-modal-icon info" style="background:var(--accent-soft);color:var(--accent-light);">
+      📋
+    </div>
+    <h2 class="mh-modal-title">Import Preview</h2>
+    <p class="mh-modal-desc" id="preview-summary">
+      Loading...
+    </p>
+
+    <div class="preview-table-wrap" id="preview-table-wrap">
+      <table class="preview-table" id="preview-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Shop</th>
+          </tr>
+        </thead>
+        <tbody id="preview-body"></tbody>
+      </table>
+      <div class="preview-more" id="preview-more"></div>
+    </div>
+
+    <div class="mh-modal-actions">
+      <button type="button" class="btn btn-ghost" id="preview-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="preview-confirm">Import</button>
+    </div>
+  </div>
+</div>

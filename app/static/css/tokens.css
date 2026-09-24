@@ -1,0 +1,127 @@
+/* =====================================================
+   Machine Hub User — Design Tokens
+   Premium 2026 (Linear/Vercel inspired)
+   ===================================================== */
+
+:root {
+  /* === Background layers === */
+  --bg: #09090b;
+  --surface: #0f0f10;
+  --surface-2: #18181b;
+  --surface-3: #1f1f23;
+  --surface-hover: #22222a;
+
+  /* === Borders === */
+  --border: #27272a;
+  --border-2: #3f3f46;
+  --border-focus: #6366f1;
+
+  /* === Text === */
+  --text: #fafafa;
+  --text-2: #a1a1aa;
+  --text-3: #71717a;
+  --text-4: #52525b;
+
+  /* === Accent (indigo/violet) === */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --accent-light: #a5b4fc;
+  --accent-text: #c7d2fe;
+
+  /* === Gradient === */
+  --gradient-accent: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --gradient-accent-hover: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+  /* === Status === */
+  --success: #22c55e;
+  --success-soft: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --warning-soft: rgba(245, 158, 11, 0.12);
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.12);
+
+  /* === Radius === */
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-md: 14px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-2xl: 24px;
+  --r-full: 999px;
+
+  /* === Spacing (4px base) === */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+
+  /* === Shadows === */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --shadow-accent: 0 8px 24px rgba(99, 102, 241, 0.25);
+
+  /* === Typography === */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Noto Sans Myanmar', 'Noto Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-base: 14px;
+  --fs-md: 15px;
+  --fs-lg: 16px;
+  --fs-xl: 18px;
+  --fs-2xl: 22px;
+  --fs-3xl: 28px;
+  --fs-4xl: 36px;
+
+  /* === Animation === */
+  --t-fast: 0.15s ease;
+  --t: 0.25s ease;
+  --t-slow: 0.4s ease;
+  --t-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* === Z-index === */
+  --z-base: 1;
+  --z-sticky: 10;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+}
+
+/* === Light theme === */
+[data-theme="light"] {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --surface-3: #e4e4e7;
+  --surface-hover: #e4e4e7;
+
+  --border: #e4e4e7;
+  --border-2: #d4d4d8;
+
+  --text: #09090b;
+  --text-2: #52525b;
+  --text-3: #71717a;
+  --text-4: #a1a1aa;
+
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: rgba(79, 70, 229, 0.08);
+  --accent-light: #6366f1;
+  --accent-text: #4338ca;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.12);
+}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Machine Hub{% endblock %}
+
+{% block content %}
+<div class="app">
+  <!-- Header -->
+  <header class="header">
+    <div class="brand">
+      <span class="logo">MH</span>
+      <span class="brand-name">Machine Hub</span>
+    </div>
+    <a href="/settings" class="icon-btn" title="Settings">
+      <svg class="icon"><use href="#i-settings"/></svg>
+    </a>
+  </header>
+
+  <!-- STATE: Empty (welcome) -->
+  <section class="state" id="state-empty">
+    <div class="hero">
+      <div class="hero-icon">📥</div>
+      <h1 class="hero-title">Machine Hub မှ<br>ကြိုဆိုပါတယ်</h1>
+      <p class="hero-sub">
+        Machine Code ရှာဖွေဖို့<br>
+        Excel file ကို Import လုပ်ပါ
+      </p>
+      <button type="button" class="btn btn-primary btn-lg" id="btn-pick-file">
+        <svg class="icon"><use href="#i-upload"/></svg>
+        Excel File ရွေးပါ
+      </button>
+      <input type="file" id="file-input"
+             accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
+             style="display:none">
+      <div class="hero-hint">
+        machine_code | machine_name | location
+      </div>
+    </div>
+  </section>
+
+  <!-- STATE: Loaded -->
+  <section class="state" id="state-loaded" hidden>
+
+    <!-- Greeting -->
+    <div class="greeting" id="greeting">
+      <div class="greeting-title">မင်္ဂလာပါ 👋</div>
+      <div class="greeting-sub">Machine Code ရှာဖွေပါ</div>
+    </div>
+
+    <!-- Search box -->
+    <div class="search-box">
+      <svg class="icon search-icon"><use href="#i-search"/></svg>
+      <input type="text" id="search-input"
+             placeholder="Machine code / name ရှာပါ..."
+             autocomplete="off">
+      <button type="button" class="search-clear" id="search-clear" hidden>
+        <svg class="icon"><use href="#i-x"/></svg>
+      </button>
+    </div>
+
+    <!-- Quick chips -->
+    <div class="chips" id="chips"></div>
+
+    <!-- Search results (shown when typing) -->
+    <div id="results"></div>
+
+    <!-- Recent (shown when no query) -->
+    <div id="recent-section">
+      <h2 class="section-title">Recent Searches</h2>
+      <div id="recent-list" class="recent-list"></div>
+    </div>
+
+    <!-- Quick actions -->
+    <div id="quick-actions">
+      <h2 class="section-title">Quick Actions</h2>
+      <button type="button" class="action-card" id="btn-action-reimport">
+        <svg class="icon action-icon"><use href="#i-upload"/></svg>
+        <div class="action-text">
+          <div class="action-title">Re-import Excel</div>
+          <div class="action-sub">Update machine data</div>
+        </div>
+        <svg class="icon action-arrow"><use href="#i-chevron-right"/></svg>
+      </button>
+      <input type="file" id="file-input-2" accept=".xlsx,.xls,.csv" style="display:none">
+
+      <a href="/settings" class="action-card">
+        <svg class="icon action-icon"><use href="#i-settings"/></svg>
+        <div class="action-text">
+          <div class="action-title">Settings</div>
+          <div class="action-sub">Theme, data, about</div>
+        </div>
+        <svg class="icon action-arrow"><use href="#i-chevron-right"/></svg>
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <span id="stats-count">—</span>
+      <span id="stats-last"></span>
+    </div>
+  </section>
+
+  <!-- Import overlay -->
+  <div class="overlay" id="import-overlay" hidden>
+    <div class="overlay-card" style="min-width:280px;max-width:340px;">
+      <div class="spinner"></div>
+      <div class="overlay-text" id="import-status" style="margin-bottom:16px;">Import လုပ်နေတယ်...</div>
+      <div class="import-bar" id="import-bar">
+        <div class="import-bar-fill" id="import-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="import-bar-label" id="import-bar-label">Starting...</div>
+    </div>
+  </div>
+
+  {% include "partials/import_preview.html" %}
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden></div>
+</div>
+{% endblock %}

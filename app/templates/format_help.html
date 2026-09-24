@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Excel Format — Machine Hub{% endblock %}
+
+{% block content %}
+<div class="app">
+  <header class="header">
+    <a href="/settings" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Excel Format</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="state">
+    <div class="help-hero">
+      <div style="font-size:56px;margin-bottom:12px;">📄</div>
+      <h1 class="hero-title" style="font-size:20px;">Excel Format လမ်းညွှန်</h1>
+      <p class="hero-sub" style="margin-bottom:20px;">
+        Machine data ကို Excel file (.xlsx or .csv) နဲ့ ထည့်ပါ
+      </p>
+      <a href="/download/sample.xlsx" class="btn btn-primary btn-lg" download>
+        <svg class="icon"><use href="#i-download"/></svg>
+        Sample File ရယူပါ
+      </a>
+    </div>
+
+    <h2 class="section-title">Columns</h2>
+
+    <div class="format-row">
+      <div class="format-header">
+        <code>machine_code</code>
+        <span class="format-required">Required</span>
+      </div>
+      <div class="format-desc">
+        Machine အမှတ်အသား — English, numbers, underscore (_) ရပါတယ်<br>
+        <em>Example: M_SLOT_001, R_MEDAL_AVENGERS_001</em>
+      </div>
+    </div>
+
+    <div class="format-row">
+      <div class="format-header">
+        <code>machine_name</code>
+        <span class="format-optional">Optional</span>
+      </div>
+      <div class="format-desc">
+        Machine နာမည် — မထည့်ရင် code ကို name အဖြစ် သုံးမယ်<br>
+        <em>Example: Dream Castle, Aladdin</em>
+      </div>
+    </div>
+
+    <div class="format-row">
+      <div class="format-header">
+        <code>shop_code</code>
+        <span class="format-optional">Optional</span>
+      </div>
+      <div class="format-desc">
+        Shop / Location — မထည့်ရင် "location" column ကို ရှာမယ်<br>
+        <em>Example: A3, A4, A5</em>
+      </div>
+    </div>
+
+    <div class="format-row">
+      <div class="format-header">
+        <code>description</code>
+        <span class="format-optional">Optional</span>
+      </div>
+      <div class="format-desc">
+        အပိုအချက်အလက်<br>
+        <em>Example: Slot machine, Racing game</em>
+      </div>
+    </div>
+
+    <h2 class="section-title">Excel နမူနာ</h2>
+
+    <div class="format-example">
+      <table>
+        <thead>
+          <tr>
+            <th>machine_code</th>
+            <th>machine_name</th>
+            <th>shop_code</th>
+            <th>description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>M_SLOT_001</td>
+            <td>Dream Castle</td>
+            <td>A3</td>
+            <td>Slot</td>
+          </tr>
+          <tr>
+            <td>R_MEDAL_001</td>
+            <td>Avengers</td>
+            <td>A4</td>
+            <td>Medal</td>
+          </tr>
+          <tr>
+            <td>P_CLAW_001</td>
+            <td>Epic Mini</td>
+            <td>A3</td>
+            <td>Claw</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="section-title">Tips</h2>
+
+    <div class="tip-row">
+      <div class="tip-icon">✅</div>
+      <div class="tip-text">
+        <strong>Header — case-insensitive</strong><br>
+        "Machine Code" သို့ "machine_code" — ၂ မျိုးလုံး ရပါတယ်
+      </div>
+    </div>
+
+    <div class="tip-row">
+      <div class="tip-icon">✅</div>
+      <div class="tip-text">
+        <strong>Duplicate — skip</strong><br>
+        Same code ၂ ခါ ရှိရင် ပထမ တစ်ခုပဲ ယူမယ်
+      </div>
+    </div>
+
+    <div class="tip-row">
+      <div class="tip-icon">✅</div>
+      <div class="tip-text">
+        <strong>Empty rows — skip</strong><br>
+        machine_code empty ဖြစ်ရင် ကျော်လိုက်မယ်
+      </div>
+    </div>
+
+    <div class="tip-row">
+      <div class="tip-icon">⚠️</div>
+      <div class="tip-text">
+        <strong>Import — replace mode</strong><br>
+        File အသစ် ထည့်ရင် အဟောင်း data အားလုံး ပျက်မယ်
+      </div>
+    </div>
+
+    <div style="height:40px"></div>
+  </div>
+</div>
+{% endblock %}

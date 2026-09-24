@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Settings — Machine Hub{% endblock %}
+
+{% block content %}
+<div class="app">
+  <header class="header">
+    <a href="/" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Settings</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="state">
+
+    <!-- Appearance -->
+    <h2 class="section-title">Appearance</h2>
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-moon"/></svg>
+        <div>
+          <div class="setting-title">Theme</div>
+          <div class="setting-sub">Dark / Light</div>
+        </div>
+      </div>
+      <div class="theme-toggle" id="theme-toggle">
+        <button type="button" class="theme-btn" data-theme-val="dark">
+          <svg class="icon"><use href="#i-moon"/></svg>
+        </button>
+        <button type="button" class="theme-btn" data-theme-val="light">
+          <svg class="icon"><use href="#i-sun"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <h2 class="section-title">Data</h2>
+
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-database"/></svg>
+        <div>
+          <div class="setting-title">Machines</div>
+          <div class="setting-sub" id="set-count">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-clock"/></svg>
+        <div>
+          <div class="setting-title">Last Import</div>
+          <div class="setting-sub" id="set-last">—</div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-lg" id="btn-reimport-2" style="margin-top:16px;">
+      <svg class="icon"><use href="#i-upload"/></svg>
+      Re-import Excel
+    </button>
+    <input type="file" id="file-input-3" accept=".xlsx,.xls,.csv" style="display:none">
+
+    <button type="button" class="btn btn-ghost btn-lg" id="btn-clear" style="margin-top:10px;">
+      <svg class="icon"><use href="#i-trash"/></svg>
+      Clear All Data
+    </button>
+
+    <!-- About -->
+    <h2 class="section-title">About</h2>
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-info"/></svg>
+        <div>
+          <div class="setting-title">Machine Hub User</div>
+          <div class="setting-sub">v1.0 · Offline-only</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/help/format" class="setting-row" style="text-decoration:none;color:inherit;">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-help"/></svg>
+        <div>
+          <div class="setting-title">Excel Format Help</div>
+          <div class="setting-sub">Columns + sample file download</div>
+        </div>
+      </div>
+      <svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <a href="/download/sample.xlsx" class="setting-row" style="text-decoration:none;color:inherit;" download>
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-download"/></svg>
+        <div>
+          <div class="setting-title">Download Sample</div>
+          <div class="setting-sub">machine_hub_sample.xlsx</div>
+        </div>
+      </div>
+      <svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <div style="height:40px"></div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="import-overlay" hidden>
+    <div class="overlay-card" style="min-width:280px;max-width:340px;">
+      <div class="spinner"></div>
+      <div class="overlay-text" id="import-status" style="margin-bottom:16px;">Import လုပ်နေတယ်...</div>
+      <div class="import-bar" id="import-bar">
+        <div class="import-bar-fill" id="import-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="import-bar-label" id="import-bar-label">Starting...</div>
+    </div>
+  </div>
+
+  {% include "partials/import_preview.html" %}
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden></div>
+</div>
+{% endblock %}

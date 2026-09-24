@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Machine — Machine Hub{% endblock %}
+
+{% block content %}
+<div class="app">
+  <header class="header">
+    <a href="/" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Machine Detail</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="state" id="machine-wrap">
+    <div class="loading-box" id="machine-loading">
+      <div class="spinner"></div>
+      <div style="color:var(--text-3);font-size:13px;margin-top:12px;">Loading...</div>
+    </div>
+
+    <div id="machine-content" hidden>
+      <!-- Code card -->
+      <div class="code-hero">
+        <div class="code-hero-label">MACHINE CODE</div>
+        <div class="code-hero-value" id="m-code">—</div>
+        <button type="button" class="code-hero-copy" id="m-copy">
+          <svg class="icon"><use href="#i-copy"/></svg>
+        </button>
+      </div>
+
+      <!-- Info cards -->
+      <div class="info-grid">
+        <div class="info-row">
+          <div class="info-label">Name</div>
+          <div class="info-value" id="m-name">—</div>
+        </div>
+        <div class="info-row" id="m-shop-row">
+          <div class="info-label">Shop / Location</div>
+          <div class="info-value" id="m-shop">—</div>
+        </div>
+        <div class="info-row" id="m-desc-row">
+          <div class="info-label">Description</div>
+          <div class="info-value" id="m-desc">—</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="detail-actions">
+        <button type="button" class="btn btn-primary btn-lg" id="m-copy-2">
+          <svg class="icon"><use href="#i-copy"/></svg>
+          Copy Code
+        </button>
+        <button type="button" class="btn btn-ghost btn-lg" id="m-share">
+          <svg class="icon"><use href="#i-share"/></svg>
+          Share
+        </button>
+      </div>
+    </div>
+
+    <div id="machine-error" hidden style="text-align:center;padding:40px 20px;">
+      <div style="font-size:48px;margin-bottom:12px;">❌</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:6px;">Machine not found</div>
+      <div style="color:var(--text-3);font-size:13px;">Data import လုပ်ထားပါသလား?</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+</div>
+{% endblock %}
