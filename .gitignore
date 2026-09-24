@@ -16,3 +16,8 @@ instance/
 # Backups
 *.bak
 *.bak.*
+
+# Backup files with timestamps
+*.bak_*
+*.bak.*
+*.bak[0-9]*
