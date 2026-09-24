@@ -1329,3 +1329,236 @@ body {
   color: var(--text-3);
   font-family: var(--font-mono);
 }
+
+/* ==================== UNDO TOAST ==================== */
+.undo-btn {
+  padding: 6px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  transition: all var(--t-fast);
+  flex-shrink: 0;
+}
+.undo-btn:hover {
+  background: var(--accent-hover);
+}
+.undo-btn:active {
+  transform: scale(0.95);
+}
+
+/* Undo toast — wider */
+.toast {
+  max-width: 92vw;
+}
+
+/* ==================== BUG REPORT MODAL ==================== */
+.bug-textarea {
+  width: 100%;
+  padding: var(--s-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  margin-bottom: var(--s-3);
+}
+.bug-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.bug-details {
+  margin-bottom: var(--s-3);
+}
+.bug-details summary {
+  cursor: pointer;
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  padding: var(--s-2) 0;
+}
+.bug-sysinfo {
+  padding: var(--s-3);
+  background: var(--surface-3);
+  border-radius: var(--r-sm);
+  font-size: 11px;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  margin: 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+/* ==================== PULL TO REFRESH ==================== */
+.pull-indicator {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-80px);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-xs);
+  color: var(--text-2);
+  opacity: 0;
+  transition: transform var(--t), opacity var(--t);
+  pointer-events: none;
+  margin-top: 12px;
+}
+.pull-indicator.active {
+  transform: translateX(-50%) translateY(60px);
+  opacity: 1;
+}
+.pull-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: mh-spin 0.9s linear infinite;
+  display: none;
+}
+.pull-text {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ==================== SWIPE RESULT CARDS ==================== */
+.result-card {
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;  /* padding moved to inner */
+  touch-action: pan-y;
+}
+.result-card-inner {
+  padding: var(--s-4);
+  background: var(--surface);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.25s var(--t-spring);
+  will-change: transform;
+}
+.result-card.swiping .result-card-inner {
+  transition: none;
+}
+.result-card-actions {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: stretch;
+  z-index: 1;
+}
+.swipe-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+  width: 72px;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  padding: 0;
+}
+.swipe-action .icon { width: 20px; height: 20px; }
+.swipe-action-fav { background: var(--warning); }
+.swipe-action-share { background: var(--accent); }
+.swipe-action-detail { background: var(--success); }
+
+/* Swipe hint animation (first time) */
+@keyframes swipeHint {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-20px); }
+}
+
+/* ==================== LONG-PRESS CONTEXT MENU ==================== */
+.context-menu {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0));
+  left: 16px;
+  right: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--s-2);
+  z-index: var(--z-modal);
+  animation: ctxSlideUp var(--t-slow) var(--t-spring);
+}
+@keyframes ctxSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.context-header {
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--s-1);
+}
+.context-title {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-all;
+  font-family: var(--font-mono);
+}
+.context-sub {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.context-action {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  background: transparent;
+  border: none;
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background var(--t-fast);
+  text-decoration: none;
+}
+.context-action:hover {
+  background: var(--surface-2);
+}
+.context-action:active {
+  background: var(--accent-soft);
+}
+.context-action .icon {
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+.context-action-danger {
+  color: var(--danger);
+}
+.context-action-danger .icon {
+  color: var(--danger);
+}

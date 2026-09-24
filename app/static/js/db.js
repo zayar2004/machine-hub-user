@@ -166,6 +166,20 @@
     });
   }
 
+  function snapshot() {
+    return getAll().then(function (all) {
+      return { records: all, ts: Date.now() };
+    });
+  }
+
+  function restore(snap) {
+    if (!snap || !snap.records) return Promise.resolve(0);
+    return clear().then(function () {
+      if (!snap.records.length) return 0;
+      return putAll(snap.records);
+    });
+  }
+
   window.MH_DB = {
     open: open,
     putAll: putAll,
@@ -178,6 +192,8 @@
     isFavorite: isFavorite,
     listFavorites: listFavorites,
     favoritesCount: favoritesCount,
+    snapshot: snapshot,
+    restore: restore,
   };
 
   console.log('[MH_DB] loaded');

@@ -228,6 +228,85 @@
     });
   }
 
+  function collectSysInfo() {
+    var lines = [];
+    lines.push('Machine Hub User v1.0');
+    lines.push('Time: ' + new Date().toISOString());
+    lines.push('URL: ' + location.href);
+    lines.push('UA: ' + navigator.userAgent);
+    lines.push('Lang: ' + navigator.language);
+    lines.push('Theme: ' + (window.MH_THEME ? window.MH_THEME.effective() : '?'));
+    lines.push('Font: ' + (document.documentElement.getAttribute('data-font') || 'md'));
+    lines.push('Online: ' + navigator.onLine);
+    return lines.join('\n');
+  }
+
+  function bindBugReport() {
+    var btn = $('#btn-bug-report');
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+      var modal = $('#bug-modal');
+      if (!modal) return;
+
+      // Fill system info
+      var info = $('#bug-sysinfo');
+      if (info) info.textContent = collectSysInfo();
+
+      // Machines count
+      window.MH_DB.count().then(function (n) {
+        var info2 = $('#bug-sysinfo');
+        if (info2) info2.textContent = collectSysInfo() + '\nMachines: ' + n;
+      });
+
+      modal.hidden = false;
+      setTimeout(function () {
+        var ta = $('#bug-text');
+        if (ta) ta.focus();
+      }, 200);
+    });
+
+    // Cancel
+    var cancel = $('#bug-cancel');
+    if (cancel) {
+      cancel.addEventListener('click', function () {
+        var modal = $('#bug-modal');
+        if (modal) modal.hidden = true;
+      });
+    }
+
+    // Copy report
+    var copy = $('#bug-copy');
+    if (copy) {
+      copy.addEventListener('click', function () {
+        var text = ($('#bug-text') && $('#bug-text').value) || '(no description)';
+        var info = ($('#bug-sysinfo') && $('#bug-sysinfo').textContent) || '';
+        var report = '=== BUG REPORT ===\n\n' + text + '\n\n=== SYSTEM INFO ===\n' + info;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(report).then(function () {
+            showToast('✅ Copied — paste in email/WhatsApp');
+            if (window.MH_HAPTIC) window.MH_HAPTIC.success();
+            var modal = $('#bug-modal');
+            if (modal) modal.hidden = true;
+          }).catch(function () {
+            showToast('Copy fail — long-press to copy');
+          });
+        } else {
+          showToast('Copy not supported');
+        }
+      });
+    }
+
+    // Click outside
+    var modal2 = $('#bug-modal');
+    if (modal2) {
+      modal2.addEventListener('click', function (e) {
+        if (e.target === modal2) modal2.hidden = true;
+      });
+    }
+  }
+
   function bindData() {
     var reBtn = $('#btn-reimport-2');
     var reInput = $('#file-input-3');
@@ -292,6 +371,7 @@
     window.MH_DB.open().then(function () {
       bindTheme();
       bindFont();
+      bindBugReport();
       bindData();
       refreshData();
       loadStats();

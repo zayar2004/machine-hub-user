@@ -1,0 +1,26 @@
+<!-- Bug Report Modal -->
+<div class="mh-modal" id="bug-modal" hidden>
+  <div class="mh-modal-card" style="max-width:460px;text-align:left;">
+    <div class="mh-modal-icon info" style="margin:0 0 16px;background:var(--warning-soft);color:var(--warning);">
+      🐛
+    </div>
+    <h2 class="mh-modal-title" style="text-align:left;">Report Issue</h2>
+    <p class="mh-modal-desc" style="text-align:left;font-size:13px;">
+      Problem ကို ဖော်ပြပါ။ System info ကို auto ထည့်ပေးမယ်။
+    </p>
+
+    <textarea id="bug-text" class="bug-textarea"
+              placeholder="Problem ဘာလဲ?&#10;&#10;ဥပမာ: Excel import လုပ်တုန်း error တက်တယ်"
+              rows="5"></textarea>
+
+    <details class="bug-details">
+      <summary>System Info (auto-collected)</summary>
+      <pre id="bug-sysinfo" class="bug-sysinfo"></pre>
+    </details>
+
+    <div class="mh-modal-actions" style="margin-top:16px;">
+      <button type="button" class="btn btn-ghost" id="bug-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="bug-copy">Copy Report</button>
+    </div>
+  </div>
+</div>

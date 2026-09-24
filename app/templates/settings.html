@@ -92,6 +92,11 @@
       Clear Search History
     </button>
 
+    <button type="button" class="btn btn-ghost btn-lg" id="btn-bug-report" style="margin-top:10px;">
+      <svg class="icon"><use href="#i-alert"/></svg>
+      Report Issue / Bug
+    </button>
+
     <!-- Stats -->
     <h2 class="section-title">Statistics</h2>
 
@@ -166,6 +171,8 @@
   </div>
 
   {% include "partials/import_preview.html" %}
+
+  {% include "partials/bug_modal.html" %}
 
   <!-- Toast -->
   <div class="toast" id="toast" hidden></div>
