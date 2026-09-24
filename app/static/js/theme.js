@@ -1,34 +1,59 @@
-/* Theme toggle */
+/* Machine Hub User — Theme manager (auto/dark/light) */
 (function () {
   'use strict';
-  const KEY = 'mh_theme';
-  const DEFAULT = 'dark';
 
-  function getStored() {
-    try { return localStorage.getItem(KEY); } catch (e) { return null; }
+  var KEY = 'mh_theme';
+  var MODES = ['auto', 'dark', 'light'];
+
+  function getMode() {
+    try {
+      var m = localStorage.getItem(KEY) || 'auto';
+      return MODES.indexOf(m) >= 0 ? m : 'auto';
+    } catch (e) { return 'auto'; }
   }
 
-  function apply(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    document.querySelectorAll('[data-theme-toggle]').forEach(el => {
-      el.innerHTML = theme === 'dark'
-        ? '<svg class="icon"><use href="#i-sun"/></svg>'
-        : '<svg class="icon"><use href="#i-moon"/></svg>';
-    });
+  function setMode(mode) {
+    if (MODES.indexOf(mode) < 0) mode = 'auto';
+    try { localStorage.setItem(KEY, mode); } catch (e) {}
+    apply();
   }
 
-  function toggle() {
-    const cur = document.documentElement.getAttribute('data-theme') || DEFAULT;
-    const next = cur === 'dark' ? 'light' : 'dark';
-    try { localStorage.setItem(KEY, next); } catch (e) {}
-    apply(next);
+  function systemPrefers() {
+    try {
+      return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    } catch (e) { return 'dark'; }
   }
 
-  apply(getStored() || DEFAULT);
+  function effectiveTheme() {
+    var mode = getMode();
+    if (mode === 'auto') return systemPrefers();
+    return mode;
+  }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('[data-theme-toggle]').forEach(el => {
-      el.addEventListener('click', toggle);
-    });
-  });
+  function apply() {
+    var t = effectiveTheme();
+    document.documentElement.setAttribute('data-theme', t);
+  }
+
+  // Watch system changes (auto mode)
+  try {
+    var mq = window.matchMedia('(prefers-color-scheme: light)');
+    var handler = function () {
+      if (getMode() === 'auto') apply();
+    };
+    if (mq.addEventListener) mq.addEventListener('change', handler);
+    else if (mq.attachListener) mq.attachListener(handler);
+  } catch (e) {}
+
+  // Apply immediately (before DOM)
+  apply();
+
+  window.MH_THEME = {
+    get: getMode,
+    set: setMode,
+    effective: effectiveTheme,
+    apply: apply,
+  };
+
+  console.log('[MH_THEME] mode:', getMode());
 })();

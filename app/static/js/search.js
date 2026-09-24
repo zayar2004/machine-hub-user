@@ -8,8 +8,12 @@
 
   function $(sel) { return document.querySelector(sel); }
 
-  function vibrate(ms) {
-    try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+  function haptic(type) {
+    if (window.MH_HAPTIC && window.MH_HAPTIC[type]) {
+      window.MH_HAPTIC[type]();
+    } else {
+      try { if (navigator.vibrate) navigator.vibrate(20); } catch (e) {}
+    }
   }
 
   function esc(s) {
@@ -88,6 +92,7 @@
   }
 
   function removeRecent(q) {
+    haptic('light');
     var list = getRecent().filter(function (x) { return x !== q; });
     try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); } catch (e) {}
     renderRecent();
@@ -225,7 +230,7 @@
         window.MH_DB.toggleFavorite(rec).then(function (nowFav) {
           b.classList.toggle('active', nowFav);
           showToast(nowFav ? '⭐ Added to favorites' : 'Removed from favorites');
-          if (typeof vibrate === 'function') vibrate(30);
+          haptic('light');
           renderFavorites();
         });
       });
@@ -240,6 +245,7 @@
   }
 
   function copyText(text) {
+    haptic('medium');
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () {
         showToast('📋 Copied: ' + text);
@@ -454,6 +460,7 @@
       clearTimeout(safety);
       setTimeout(function () {
         hideOverlay();
+        haptic('success');
         var msg = '✅ Import OK — ' + result.records.length + ' machines';
         var skipped = (result.invalid || 0) + (result.duplicate || 0);
         if (skipped > 0) msg += ' (' + skipped + ' skipped)';
@@ -463,6 +470,7 @@
     }).catch(function (err) {
       clearTimeout(safety);
       hideOverlay();
+      haptic('error');
       console.error('[Import]', err);
       showToast('❌ Import fail: ' + (err.message || ''));
     });

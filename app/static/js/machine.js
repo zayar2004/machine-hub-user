@@ -17,6 +17,7 @@
   }
 
   function copyText(text) {
+    try { window.MH_HAPTIC && window.MH_HAPTIC.medium(); } catch (e) {}
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function () {
         showToast('📋 Copied: ' + text);
@@ -74,7 +75,7 @@
         window.MH_DB.toggleFavorite(record).then(function (nowFav) {
           favBtn.classList.toggle('active', nowFav);
           showToast(nowFav ? '⭐ Added to favorites' : 'Removed from favorites');
-          try { if (navigator.vibrate) navigator.vibrate(30); } catch (e) {}
+          try { window.MH_HAPTIC && window.MH_HAPTIC.light(); } catch (e) {}
         });
       });
     }

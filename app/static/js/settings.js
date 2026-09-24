@@ -29,6 +29,80 @@
     el.textContent = d.toLocaleString();
   }
 
+  function loadStats() {
+    if (!window.MH_DB) return;
+
+    // Machines count
+    window.MH_DB.count().then(function (n) {
+      var el = $('#stat-machines');
+      if (el) el.textContent = n;
+    });
+
+    // Favorites count
+    if (window.MH_DB.favoritesCount) {
+      window.MH_DB.favoritesCount().then(function (n) {
+        var el = $('#stat-favorites');
+        if (el) el.textContent = n;
+      });
+    }
+
+    // Searches count
+    try {
+      var recents = JSON.parse(localStorage.getItem('mh_recent') || '[]');
+      var el = $('#stat-searches');
+      if (el) el.textContent = recents.length;
+    } catch (e) {}
+
+    // Shops chart — group by shop_code
+    window.MH_DB.getAll().then(function (all) {
+      var shops = {};
+      all.forEach(function (m) {
+        var s = m.shop_code || 'N/A';
+        shops[s] = (shops[s] || 0) + 1;
+      });
+
+      // Unique shops count
+      var uniqueShops = Object.keys(shops).length;
+      var shopsEl = $('#stat-shops');
+      if (shopsEl) shopsEl.textContent = uniqueShops;
+
+      // Render chart
+      var chart = $('#shops-chart');
+      if (!chart) return;
+
+      var entries = Object.keys(shops).map(function (k) {
+        return { shop: k, count: shops[k] };
+      }).sort(function (a, b) { return b.count - a.count; }).slice(0, 8);
+
+      if (!entries.length) {
+        chart.innerHTML = '<div style="text-align:center;color:var(--text-3);font-size:13px;">No data — import Excel first</div>';
+        return;
+      }
+
+      var max = entries[0].count;
+      var html = '<div class="shops-chart-title">Machines per Shop</div>';
+      entries.forEach(function (e) {
+        var pct = Math.round((e.count / max) * 100);
+        html += '<div class="shop-bar">' +
+          '<div class="shop-bar-label">' + escHtml(e.shop) + '</div>' +
+          '<div class="shop-bar-track">' +
+          '<div class="shop-bar-fill" style="width:' + pct + '%"></div>' +
+          '</div>' +
+          '<div class="shop-bar-value">' + e.count + '</div>' +
+          '</div>';
+      });
+      chart.innerHTML = html;
+    }).catch(function (err) {
+      console.warn('[Stats]', err);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+
   function refreshData() {
     if (!window.MH_DB) return;
     window.MH_DB.count().then(function (n) {
@@ -36,23 +110,30 @@
       if (el) el.textContent = n + ' machines';
     });
     window.MH_DB.getMeta('last_import').then(renderLastImport);
+    loadStats();
   }
 
   function bindTheme() {
     var toggle = $('#theme-toggle');
     if (!toggle) return;
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+    var current = (window.MH_THEME && window.MH_THEME.get) ? window.MH_THEME.get() : 'auto';
 
     toggle.querySelectorAll('[data-theme-val]').forEach(function (b) {
       if (b.getAttribute('data-theme-val') === current) b.classList.add('active');
       b.addEventListener('click', function () {
         var val = b.getAttribute('data-theme-val');
-        document.documentElement.setAttribute('data-theme', val);
-        try { localStorage.setItem('mh_theme', val); } catch (e) {}
+        if (window.MH_THEME && window.MH_THEME.set) {
+          window.MH_THEME.set(val);
+        } else {
+          document.documentElement.setAttribute('data-theme', val === 'auto' ? 'dark' : val);
+          try { localStorage.setItem('mh_theme', val); } catch (e) {}
+        }
         toggle.querySelectorAll('[data-theme-val]').forEach(function (x) {
           x.classList.toggle('active', x === b);
         });
-        showToast('Theme: ' + val);
+        try { window.MH_HAPTIC && window.MH_HAPTIC.light(); } catch (e) {}
+        var label = val === 'auto' ? 'Auto (system)' : val.charAt(0).toUpperCase() + val.slice(1);
+        showToast('Theme: ' + label);
       });
     });
   }
@@ -111,13 +192,39 @@
       clearTimeout(safety);
       hideOverlay();
       var skip = (result.invalid || 0) + (result.duplicate || 0);
-        showToast('✅ Import OK — ' + result.records.length + (skip > 0 ? ' (' + skip + ' skipped)' : ''));
+        try { window.MH_HAPTIC && window.MH_HAPTIC.success(); } catch (e) {}
+      showToast('✅ Import OK — ' + result.records.length + (skip > 0 ? ' (' + skip + ' skipped)' : ''));
       refreshData();
     }).catch(function (err) {
       clearTimeout(safety);
       hideOverlay();
+      try { window.MH_HAPTIC && window.MH_HAPTIC.error(); } catch (e) {}
       showToast('❌ ' + (err.message || 'fail'));
       console.error(err);
+    });
+  }
+
+  function bindFont() {
+    var toggle = $('#font-toggle');
+    if (!toggle) return;
+    var FONT_KEY = 'mh_font';
+    var current = 'md';
+    try { current = localStorage.getItem(FONT_KEY) || 'md'; } catch (e) {}
+    if (['sm','md','lg'].indexOf(current) < 0) current = 'md';
+
+    toggle.querySelectorAll('[data-font-val]').forEach(function (b) {
+      if (b.getAttribute('data-font-val') === current) b.classList.add('active');
+      b.addEventListener('click', function () {
+        var val = b.getAttribute('data-font-val');
+        try { localStorage.setItem(FONT_KEY, val); } catch (e) {}
+        document.documentElement.setAttribute('data-font', val);
+        toggle.querySelectorAll('[data-font-val]').forEach(function (x) {
+          x.classList.toggle('active', x === b);
+        });
+        try { window.MH_HAPTIC && window.MH_HAPTIC.light(); } catch (e) {}
+        var label = val === 'sm' ? 'Small' : val === 'lg' ? 'Large' : 'Medium';
+        showToast('Font: ' + label);
+      });
     });
   }
 
@@ -184,8 +291,10 @@
     if (!window.MH_DB) return;
     window.MH_DB.open().then(function () {
       bindTheme();
+      bindFont();
       bindData();
       refreshData();
+      loadStats();
       console.log('[Settings] ready');
     });
   });
