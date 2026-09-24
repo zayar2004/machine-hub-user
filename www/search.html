@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="my" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Search — Machine Hub</title>
+
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/static/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/user.css">
+  <link rel="stylesheet" href="/static/css/mh-user.css">
+
+  <script>
+    // Theme (auto/dark/light)
+    (function() {
+      try {
+        var mode = localStorage.getItem('mh_theme') || 'auto';
+        var theme = mode;
+        if (mode === 'auto') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+    // Font scale (sm/md/lg)
+    (function() {
+      try {
+        var f = localStorage.getItem('mh_font') || 'md';
+        if (['sm','md','lg'].indexOf(f) < 0) f = 'md';
+        document.documentElement.setAttribute('data-font', f);
+      } catch (e) {
+        document.documentElement.setAttribute('data-font', 'md');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="header">
+    <a href="/index.html" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Search</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="search-box search-box-inline">
+    <svg class="icon search-icon"><use href="#i-search"/></svg>
+    <input type="text" id="search-input" placeholder="ရှာပါ..." autocomplete="off" autofocus>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+
+<!-- Icons sprite -->
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/theme.js"></script>
+
+<!-- SheetJS (Excel) -->
+<script src="/static/vendor/xlsx.full.min.js"></script>
+<!-- QR -->
+<script src="/static/vendor/qrcode.min.js"></script>
+
+<!-- App logic -->
+<script src="/static/js/db.js"></script>
+<script src="/static/js/excel.js"></script>
+<script src="/static/js/search.js"></script>
+<script src="/static/js/settings.js"></script>
+<script src="/static/js/machine.js"></script>
+<script src="/static/js/modal.js"></script>
+
+
+
+<script>
+  // Haptic feedback helper
+  window.MH_HAPTIC = {
+    tap: function () { try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} },
+    light: function () { try { navigator.vibrate && navigator.vibrate(20); } catch (e) {} },
+    medium: function () { try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} },
+    success: function () { try { navigator.vibrate && navigator.vibrate([30, 20, 30]); } catch (e) {} },
+    error: function () { try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {} },
+  };
+</script>
+
+<script>
+  // Register service worker (PWA offline)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/static/service-worker.js', { scope: '/' })
+        .then(function (r) { console.log('[PWA]', r.scope); })
+        .catch(function (e) { console.warn('[PWA]', e); });
+    });
+  }
+
+  // PWA install prompt
+  window.MH_INSTALL = (function () {
+    var deferredPrompt = null;
+    var bannerEl = null;
+    var DISMISS_KEY = 'mh_install_dismissed';
+
+    function isDismissed() {
+      try { return localStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
+    }
+    function dismiss() {
+      try { localStorage.setItem(DISMISS_KEY, '1'); } catch (e) {}
+      if (bannerEl) bannerEl.remove();
+    }
+
+    function showBanner() {
+      if (isDismissed()) return;
+      if (document.getElementById('pwa-install-banner')) return;
+      if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+      bannerEl = document.createElement('div');
+      bannerEl.id = 'pwa-install-banner';
+      bannerEl.className = 'pwa-banner';
+      bannerEl.innerHTML =
+        '<div class="pwa-banner-icon">📱</div>' +
+        '<div class="pwa-banner-text">' +
+        '<div class="pwa-banner-title">Home Screen မှာ ထည့်ပါ</div>' +
+        '<div class="pwa-banner-sub">App လို သုံးလို့ရမယ်</div>' +
+        '</div>' +
+        '<button type="button" class="pwa-banner-install" id="pwa-install">Install</button>' +
+        '<button type="button" class="pwa-banner-close" id="pwa-close">×</button>';
+
+      document.body.appendChild(bannerEl);
+
+      document.getElementById('pwa-install').addEventListener('click', function () {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function (choice) {
+          console.log('[PWA]', choice.outcome);
+          deferredPrompt = null;
+          dismiss();
+        });
+      });
+
+      document.getElementById('pwa-close').addEventListener('click', dismiss);
+
+      // Auto-hide after 20 sec
+      setTimeout(function () {
+        if (bannerEl && bannerEl.parentNode) dismiss();
+      }, 20000);
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Show after 3 sec
+      setTimeout(showBanner, 3000);
+    });
+
+    window.addEventListener('appinstalled', function () {
+      console.log('[PWA] installed');
+      dismiss();
+    });
+
+    return {
+      show: showBanner,
+      dismiss: dismiss,
+      canInstall: function () { return !!deferredPrompt; },
+    };
+  })();
+</script>
+
+</body>
+</html>

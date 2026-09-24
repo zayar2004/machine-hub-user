@@ -21,3 +21,12 @@ instance/
 *.bak_*
 *.bak.*
 *.bak[0-9]*
+
+# Capacitor
+android/
+node_modules/
+.gradle/
+*.apk
+
+# Build output
+www/static/

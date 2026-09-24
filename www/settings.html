@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="my" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Settings — Machine Hub</title>
+
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/static/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/user.css">
+  <link rel="stylesheet" href="/static/css/mh-user.css">
+
+  <script>
+    // Theme (auto/dark/light)
+    (function() {
+      try {
+        var mode = localStorage.getItem('mh_theme') || 'auto';
+        var theme = mode;
+        if (mode === 'auto') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+    // Font scale (sm/md/lg)
+    (function() {
+      try {
+        var f = localStorage.getItem('mh_font') || 'md';
+        if (['sm','md','lg'].indexOf(f) < 0) f = 'md';
+        document.documentElement.setAttribute('data-font', f);
+      } catch (e) {
+        document.documentElement.setAttribute('data-font', 'md');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="header">
+    <a href="/index.html" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Settings</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="state">
+
+    <!-- Appearance -->
+    <h2 class="section-title">Appearance</h2>
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-moon"/></svg>
+        <div>
+          <div class="setting-title">Theme</div>
+          <div class="setting-sub">Auto / Dark / Light</div>
+        </div>
+      </div>
+      <div class="theme-toggle" id="theme-toggle">
+        <button type="button" class="theme-btn" data-theme-val="auto" title="Auto">
+          <svg class="icon"><use href="#i-settings"/></svg>
+        </button>
+        <button type="button" class="theme-btn" data-theme-val="dark" title="Dark">
+          <svg class="icon"><use href="#i-moon"/></svg>
+        </button>
+        <button type="button" class="theme-btn" data-theme-val="light" title="Light">
+          <svg class="icon"><use href="#i-sun"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-list"/></svg>
+        <div>
+          <div class="setting-title">Font Size</div>
+          <div class="setting-sub">Small / Medium / Large</div>
+        </div>
+      </div>
+      <div class="font-toggle" id="font-toggle">
+        <button type="button" class="font-btn" data-font-val="sm" title="Small">A</button>
+        <button type="button" class="font-btn" data-font-val="md" title="Medium">A</button>
+        <button type="button" class="font-btn" data-font-val="lg" title="Large">A</button>
+      </div>
+    </div>
+
+    <!-- Data -->
+    <h2 class="section-title">Data</h2>
+
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-database"/></svg>
+        <div>
+          <div class="setting-title">Machines</div>
+          <div class="setting-sub" id="set-count">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-clock"/></svg>
+        <div>
+          <div class="setting-title">Last Import</div>
+          <div class="setting-sub" id="set-last">—</div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-lg" id="btn-reimport-2" style="margin-top:16px;">
+      <svg class="icon"><use href="#i-upload"/></svg>
+      Re-import Excel
+    </button>
+    <input type="file" id="file-input-3" accept=".xlsx,.xls,.csv" style="display:none">
+
+    <button type="button" class="btn btn-ghost btn-lg" id="btn-clear" style="margin-top:10px;">
+      <svg class="icon"><use href="#i-trash"/></svg>
+      Clear All Data
+    </button>
+
+    <button type="button" class="btn btn-ghost btn-lg" id="btn-clear-history" style="margin-top:10px;">
+      <svg class="icon"><use href="#i-clock"/></svg>
+      Clear Search History
+    </button>
+
+    <button type="button" class="btn btn-ghost btn-lg" id="btn-bug-report" style="margin-top:10px;">
+      <svg class="icon"><use href="#i-alert"/></svg>
+      Report Issue / Bug
+    </button>
+
+    <!-- Stats -->
+    <h2 class="section-title">Statistics</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-machines">—</div>
+        <div class="stat-label">Machines</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-favorites">—</div>
+        <div class="stat-label">Favorites</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-shops">—</div>
+        <div class="stat-label">Shops</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-searches">—</div>
+        <div class="stat-label">Searches</div>
+      </div>
+    </div>
+
+    <div id="shops-chart" class="shops-chart"></div>
+
+    <!-- About -->
+    <h2 class="section-title">About</h2>
+    <div class="setting-row">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-info"/></svg>
+        <div>
+          <div class="setting-title">Machine Hub User</div>
+          <div class="setting-sub">v1.0 · Offline-only</div>
+        </div>
+      </div>
+    </div>
+
+    <a href="/help.html" class="setting-row" style="text-decoration:none;color:inherit;">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-help"/></svg>
+        <div>
+          <div class="setting-title">Help Center</div>
+          <div class="setting-sub">အသုံးပြုနည်း အပြည့်အစုံ</div>
+        </div>
+      </div>
+      <svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <a href="/help-format.html" class="setting-row" style="text-decoration:none;color:inherit;">
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-file"/></svg>
+        <div>
+          <div class="setting-title">Excel Format</div>
+          <div class="setting-sub">Columns + sample file</div>
+        </div>
+      </div>
+      <svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <a href="/download/sample.xlsx" class="setting-row" style="text-decoration:none;color:inherit;" download>
+      <div class="setting-label">
+        <svg class="icon setting-icon"><use href="#i-download"/></svg>
+        <div>
+          <div class="setting-title">Download Sample</div>
+          <div class="setting-sub">machine_hub_sample.xlsx</div>
+        </div>
+      </div>
+      <svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>
+    </a>
+
+    <div style="height:40px"></div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="import-overlay" hidden>
+    <div class="overlay-card" style="min-width:280px;max-width:340px;">
+      <div class="spinner"></div>
+      <div class="overlay-text" id="import-status" style="margin-bottom:16px;">Import လုပ်နေတယ်...</div>
+      <div class="import-bar" id="import-bar">
+        <div class="import-bar-fill" id="import-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="import-bar-label" id="import-bar-label">Starting...</div>
+    </div>
+  </div>
+
+  <!-- Import Preview Modal -->
+<div class="mh-modal" id="preview-modal" hidden>
+  <div class="mh-modal-card" style="max-width:480px;">
+    <div class="mh-modal-icon info" style="background:var(--accent-soft);color:var(--accent-light);">
+      📋
+    </div>
+    <h2 class="mh-modal-title">Import Preview</h2>
+    <p class="mh-modal-desc" id="preview-summary">
+      Loading...
+    </p>
+
+    <div class="preview-table-wrap" id="preview-table-wrap">
+      <table class="preview-table" id="preview-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Shop</th>
+          </tr>
+        </thead>
+        <tbody id="preview-body"></tbody>
+      </table>
+      <div class="preview-more" id="preview-more"></div>
+    </div>
+
+    <div class="mh-modal-actions">
+      <button type="button" class="btn btn-ghost" id="preview-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="preview-confirm">Import</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Bug Report Modal -->
+<div class="mh-modal" id="bug-modal" hidden>
+  <div class="mh-modal-card" style="max-width:460px;text-align:left;">
+    <div class="mh-modal-icon info" style="margin:0 0 16px;background:var(--warning-soft);color:var(--warning);">
+      🐛
+    </div>
+    <h2 class="mh-modal-title" style="text-align:left;">Report Issue</h2>
+    <p class="mh-modal-desc" style="text-align:left;font-size:13px;">
+      Problem ကို ဖော်ပြပါ။ System info ကို auto ထည့်ပေးမယ်။
+    </p>
+
+    <textarea id="bug-text" class="bug-textarea"
+              placeholder="Problem ဘာလဲ?&#10;&#10;ဥပမာ: Excel import လုပ်တုန်း error တက်တယ်"
+              rows="5"></textarea>
+
+    <details class="bug-details">
+      <summary>System Info (auto-collected)</summary>
+      <pre id="bug-sysinfo" class="bug-sysinfo"></pre>
+    </details>
+
+    <div class="mh-modal-actions" style="margin-top:16px;">
+      <button type="button" class="btn btn-ghost" id="bug-cancel">Cancel</button>
+      <button type="button" class="btn btn-primary" id="bug-copy">Copy Report</button>
+    </div>
+  </div>
+</div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" hidden></div>
+</div>
+
+
+<!-- Icons sprite -->
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/theme.js"></script>
+
+<!-- SheetJS (Excel) -->
+<script src="/static/vendor/xlsx.full.min.js"></script>
+<!-- QR -->
+<script src="/static/vendor/qrcode.min.js"></script>
+
+<!-- App logic -->
+<script src="/static/js/db.js"></script>
+<script src="/static/js/excel.js"></script>
+<script src="/static/js/search.js"></script>
+<script src="/static/js/settings.js"></script>
+<script src="/static/js/machine.js"></script>
+<script src="/static/js/modal.js"></script>
+
+
+
+<script>
+  // Haptic feedback helper
+  window.MH_HAPTIC = {
+    tap: function () { try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} },
+    light: function () { try { navigator.vibrate && navigator.vibrate(20); } catch (e) {} },
+    medium: function () { try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} },
+    success: function () { try { navigator.vibrate && navigator.vibrate([30, 20, 30]); } catch (e) {} },
+    error: function () { try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {} },
+  };
+</script>
+
+<script>
+  // Register service worker (PWA offline)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/static/service-worker.js', { scope: '/' })
+        .then(function (r) { console.log('[PWA]', r.scope); })
+        .catch(function (e) { console.warn('[PWA]', e); });
+    });
+  }
+
+  // PWA install prompt
+  window.MH_INSTALL = (function () {
+    var deferredPrompt = null;
+    var bannerEl = null;
+    var DISMISS_KEY = 'mh_install_dismissed';
+
+    function isDismissed() {
+      try { return localStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
+    }
+    function dismiss() {
+      try { localStorage.setItem(DISMISS_KEY, '1'); } catch (e) {}
+      if (bannerEl) bannerEl.remove();
+    }
+
+    function showBanner() {
+      if (isDismissed()) return;
+      if (document.getElementById('pwa-install-banner')) return;
+      if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+      bannerEl = document.createElement('div');
+      bannerEl.id = 'pwa-install-banner';
+      bannerEl.className = 'pwa-banner';
+      bannerEl.innerHTML =
+        '<div class="pwa-banner-icon">📱</div>' +
+        '<div class="pwa-banner-text">' +
+        '<div class="pwa-banner-title">Home Screen မှာ ထည့်ပါ</div>' +
+        '<div class="pwa-banner-sub">App လို သုံးလို့ရမယ်</div>' +
+        '</div>' +
+        '<button type="button" class="pwa-banner-install" id="pwa-install">Install</button>' +
+        '<button type="button" class="pwa-banner-close" id="pwa-close">×</button>';
+
+      document.body.appendChild(bannerEl);
+
+      document.getElementById('pwa-install').addEventListener('click', function () {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function (choice) {
+          console.log('[PWA]', choice.outcome);
+          deferredPrompt = null;
+          dismiss();
+        });
+      });
+
+      document.getElementById('pwa-close').addEventListener('click', dismiss);
+
+      // Auto-hide after 20 sec
+      setTimeout(function () {
+        if (bannerEl && bannerEl.parentNode) dismiss();
+      }, 20000);
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Show after 3 sec
+      setTimeout(showBanner, 3000);
+    });
+
+    window.addEventListener('appinstalled', function () {
+      console.log('[PWA] installed');
+      dismiss();
+    });
+
+    return {
+      show: showBanner,
+      dismiss: dismiss,
+      canInstall: function () { return !!deferredPrompt; },
+    };
+  })();
+</script>
+
+</body>
+</html>

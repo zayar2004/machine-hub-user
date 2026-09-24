@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="my" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Help — Machine Hub</title>
+
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/static/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/user.css">
+  <link rel="stylesheet" href="/static/css/mh-user.css">
+
+  <script>
+    // Theme (auto/dark/light)
+    (function() {
+      try {
+        var mode = localStorage.getItem('mh_theme') || 'auto';
+        var theme = mode;
+        if (mode === 'auto') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+    // Font scale (sm/md/lg)
+    (function() {
+      try {
+        var f = localStorage.getItem('mh_font') || 'md';
+        if (['sm','md','lg'].indexOf(f) < 0) f = 'md';
+        document.documentElement.setAttribute('data-font', f);
+      } catch (e) {
+        document.documentElement.setAttribute('data-font', 'md');
+      }
+    })();
+  </script>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="header">
+    <a href="/settings.html" class="icon-btn" title="Back">
+      <svg class="icon"><use href="#i-arrow-left"/></svg>
+    </a>
+    <div class="brand">
+      <span class="brand-name">Help Center</span>
+    </div>
+    <div style="width:40px"></div>
+  </header>
+
+  <div class="state">
+
+    <!-- Hero -->
+    <div class="help-hero">
+      <div style="font-size:56px;margin-bottom:12px;">📖</div>
+      <h1 class="hero-title" style="font-size:22px;">Machine Hub User</h1>
+      <p class="hero-sub" style="margin-bottom:0;">
+        Offline machine code search app<br>
+        Internet မလိုဘဲ အလုပ်လုပ်တယ်
+      </p>
+    </div>
+
+    <!-- Table of Contents -->
+    <h2 class="section-title">Contents</h2>
+    <div class="help-toc">
+      <a href="#about" class="help-toc-item">📱 App အကြောင်း</a>
+      <a href="#import" class="help-toc-item">📥 Excel Import လုပ်နည်း</a>
+      <a href="#search" class="help-toc-item">🔍 ရှာဖွေနည်း</a>
+      <a href="#favorites" class="help-toc-item">⭐ Favorites</a>
+      <a href="#share" class="help-toc-item">🔗 Share</a>
+      <a href="#gestures" class="help-toc-item">👆 Gestures</a>
+      <a href="#settings" class="help-toc-item">⚙️ Settings</a>
+      <a href="#faq" class="help-toc-item">❓ FAQ</a>
+    </div>
+
+    <!-- About -->
+    <h2 class="section-title" id="about">📱 App အကြောင်း</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        <strong style="color:var(--text);">Machine Hub User</strong> က arcade စက်တွေရဲ့
+        machine code ကို offline မှာ ရှာဖွေဖို့ ဖန်တီးထားတဲ့ app ဖြစ်ပါတယ်။
+      </p>
+      <ul class="help-list">
+        <li>✅ <strong>Internet မလိုဘူး</strong> — 100% offline</li>
+        <li>✅ <strong>Server မလိုဘူး</strong> — data ဖုန်းထဲပဲ</li>
+        <li>✅ <strong>Fast</strong> — 50ms အတွင်း ရလဒ်</li>
+        <li>✅ <strong>Private</strong> — data ကို ဘယ်ကိုမှ မပို့ဘူး</li>
+        <li>✅ <strong>Free</strong> — အမြဲ</li>
+      </ul>
+      <div class="help-tip">
+        <strong>💡 ဘယ်သူတွေအတွက်လဲ?</strong><br>
+        Arcade technician, floor staff, စက်ပြင်သူများ
+      </div>
+    </div>
+
+    <!-- Import -->
+    <h2 class="section-title" id="import">📥 Excel Import လုပ်နည်း</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        App ကို ပထမဆုံး ဖွင့်တာနဲ့ <strong>Excel file</strong> import လုပ်ဖို့ လိုပါတယ်။
+      </p>
+
+      <div class="help-steps">
+        <div class="help-step">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Excel File ရယူပါ</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Admin / မန်နေဂျာ ဆီက .xlsx / .csv file ရယူပါ</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">2</span>
+          <div>
+            <strong>Home → "Excel File ရွေးပါ"</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">File picker ပေါ်လာမယ်</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">3</span>
+          <div>
+            <strong>File ရွေးပါ</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Preview ပေါ်လာမယ် — ဘယ်နှစ်ခု import လုပ်မလဲ ပြ</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">4</span>
+          <div>
+            <strong>"Import" နှိပ်ပါ</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Progress bar ပြီး — data save ဖြစ်မယ်</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-tip help-tip-warning">
+        <strong>⚠️ သတိထားပါ:</strong><br>
+        File အသစ် import လုပ်ရင် <strong>အဟောင်း data အားလုံး ပျက်သွားမယ်</strong>။
+        Confirm dialog ပေါ်ရင် "Replace" နှိပ်ပါ။
+      </div>
+
+      <div class="help-tip">
+        <strong>📄 Excel Format:</strong><br>
+        <code>machine_code</code> (required)<br>
+        <code>machine_name</code> (optional)<br>
+        <code>shop_code</code> / <code>location</code> (optional)<br>
+        <code>description</code> (optional)
+      </div>
+
+      <a href="/help-format.html" class="btn btn-ghost" style="margin-top:12px;width:100%;">
+        📄 Format အသေးစိတ် ကြည့်ပါ →
+      </a>
+    </div>
+
+    <!-- Search -->
+    <h2 class="section-title" id="search">🔍 ရှာဖွေနည်း</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        Home page ရဲ့ search box မှာ <strong>machine code</strong> သို့ <strong>name</strong> ရိုက်ပါ။
+      </p>
+
+      <div class="help-tip">
+        <strong>💡 ရှာဖွေနည်း ဥပမာ:</strong><br>
+        <code>Dream</code> — name partial<br>
+        <code>R_MEDAL</code> — code partial<br>
+        <code>M_SLOT_001</code> — exact code<br>
+        <code>Aladdin</code> — name exact
+      </div>
+
+      <ul class="help-list">
+        <li>✅ Partial match — "Dre" ရိုက်ရင် "Dream" တွေ့</li>
+        <li>✅ Case-insensitive — "DREAM" = "dream"</li>
+        <li>✅ Auto-search — 150ms အတွင်း ရလဒ်</li>
+        <li>✅ No internet needed</li>
+      </ul>
+
+      <div class="help-tip">
+        <strong>🎯 Tips:</strong><br>
+        • Code တစ်ခုလုံး မရှိရင် — partial ရိုက်<br>
+        • Name ပါရင် — name ရိုက်<br>
+        • ရလဒ် မတွေ့ရင် — အခြား keyword စမ်း
+      </div>
+    </div>
+
+    <!-- Favorites -->
+    <h2 class="section-title" id="favorites">⭐ Favorites</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        အသုံးများတဲ့ machine တွေကို <strong>Favorite</strong> လုပ်ထားလို့ရတယ်။
+      </p>
+
+      <div class="help-steps">
+        <div class="help-step">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Result card — swipe left</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Swipe actions ပေါ်လာမယ်</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">2</span>
+          <div>
+            <strong>"Fav" နှိပ်ပါ</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">⭐ Toast ပေါ်မယ်</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">3</span>
+          <div>
+            <strong>Home → Favorites section</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Top 5 favorite machines ပြ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-tip">
+        <strong>🎯 Long-press နဲ့လည်း favorite လုပ်နိုင်တယ်</strong><br>
+        Result card ကို 500ms ဖိထားပါ
+      </div>
+
+      <div class="help-tip">
+        <strong>💡 Machine detail မှာ:</strong><br>
+        "Favorite" button ကို နှိပ်လည်းရ
+      </div>
+    </div>
+
+    <!-- Share -->
+    <h2 class="section-title" id="share">🔗 Share</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        Machine code ကို လုပ်ဖော်ကိုင်ဖက်တွေဆီ ပို့ဖို့ နည်း ၃ မျိုး။
+      </p>
+
+      <div class="help-steps">
+        <div class="help-step">
+          <span class="step-num">1</span>
+          <div>
+            <strong>Native Share</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">WhatsApp / Viber / SMS / Email</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">2</span>
+          <div>
+            <strong>QR Code</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Machine detail → Share → QR ပြ</span>
+          </div>
+        </div>
+        <div class="help-step">
+          <span class="step-num">3</span>
+          <div>
+            <strong>Copy Text</strong><br>
+            <span style="color:var(--text-3);font-size:13px;">Code + name — clipboard ထဲ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-tip">
+        <strong>💡 Swipe Share:</strong><br>
+        Result card — swipe left → Share
+      </div>
+    </div>
+
+    <!-- Gestures -->
+    <h2 class="section-title" id="gestures">👆 Gestures</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        Mobile app လို gesture တွေ သုံးလို့ရတယ်။
+      </p>
+
+      <div class="gesture-item">
+        <div class="gesture-icon">👆</div>
+        <div class="gesture-info">
+          <strong>Tap</strong><br>
+          <span>Card → Detail, Button → Action</span>
+        </div>
+      </div>
+
+      <div class="gesture-item">
+        <div class="gesture-icon">👈</div>
+        <div class="gesture-info">
+          <strong>Swipe Left</strong><br>
+          <span>Result card → Fav / Share / Detail</span>
+        </div>
+      </div>
+
+      <div class="gesture-item">
+        <div class="gesture-icon">👇</div>
+        <div class="gesture-info">
+          <strong>Pull Down</strong><br>
+          <span>Home မှာ — Refresh (re-render)</span>
+        </div>
+      </div>
+
+      <div class="gesture-item">
+        <div class="gesture-icon">⏱</div>
+        <div class="gesture-info">
+          <strong>Long-Press (0.5s)</strong><br>
+          <span>Result card → Context menu (Copy / Share / Details / Favorite)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <h2 class="section-title" id="settings">⚙️ Settings</h2>
+    <div class="help-block">
+      <p style="font-size:14px;line-height:1.7;color:var(--text-2);">
+        Settings page မှာ စိတ်ကြိုက် ချိန်လို့ရတယ်။
+      </p>
+
+      <div class="feature-item">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-info">
+          <strong>Theme</strong><br>
+          <span>Auto (system) / Dark / Light</span>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">🔤</div>
+        <div class="feature-info">
+          <strong>Font Size</strong><br>
+          <span>Small (A) / Medium (A) / Large (A)</span>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">📥</div>
+        <div class="feature-info">
+          <strong>Re-import Excel</strong><br>
+          <span>New data ထည့်ဖို့</span>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">📄</div>
+        <div class="feature-info">
+          <strong>Excel Format Help</strong><br>
+          <span>Format လမ်းညွှန် + Sample download</span>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">📊</div>
+        <div class="feature-info">
+          <strong>Statistics</strong><br>
+          <span>Machines / Favorites / Shops / Searches</span>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">🐛</div>
+        <div class="feature-info">
+          <strong>Report Issue</strong><br>
+          <span>Bug report — copy + paste</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <h2 class="section-title" id="faq">❓ FAQ</h2>
+
+    <details class="faq-item">
+      <summary>Internet မရှိရင် သုံးလို့ ရလား?</summary>
+      <p>
+        ရပါတယ်။ <strong>100% offline</strong> ဖြစ်လို့ internet မလိုဘူး။
+        Excel import တစ်ခါ လုပ်ပြီးရင် — always offline အလုပ်လုပ်တယ်။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Server / Cloud လိုလား?</summary>
+      <p>
+        မလိုဘူး။ Data က ဖုန်းထဲ (IndexedDB) ပဲ သိမ်းတယ်။
+        <strong>Cloud ကို ဘယ်တော့မှ မချိတ်</strong> — privacy 100%။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Excel file ဘယ်လို format လဲ?</summary>
+      <p>
+        <code>machine_code</code> column မဖြစ်မနေ ပါရမယ်။
+        ကျန်တာ optional: <code>machine_name</code>, <code>shop_code</code>/<code>location</code>, <code>description</code>။
+      </p>
+      <a href="/help-format.html" class="link-btn">📄 Format Help ကြည့်ပါ</a>
+    </details>
+
+    <details class="faq-item">
+      <summary>Excel import ၂ ခါ လုပ်ရင် ဘာဖြစ်မလဲ?</summary>
+      <p>
+        <strong>အဟောင်း data အားလုံး ပျက်သွားမယ်</strong> — အသစ် data ပဲ ကျန်မယ်။
+        Confirm dialog ပေါ်ရင် "Replace" နှိပ်ပါ။
+      </p>
+      <p style="color:var(--success);">
+        ✅ <strong>5 sec Undo:</strong> Import ပြီးရင် toast မှာ UNDO button နှိပ်ရင် ပြန်ရနိုင်တယ်
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Machine data ဘယ်လောက်ထိ ထည့်လို့ရလဲ?</summary>
+      <p>
+        အကန့်အသတ် မရှိဘူး။ ၁၀၀၀၀+ rows ထည့်လို့ရတယ်။
+        IndexedDB က ဖုန်း storage ပေါ်မှာ မူတည်တယ်။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Copy လုပ်ရင် "Copied" မပြဘူး?</summary>
+      <p>
+        Clipboard permission စစ်ပါ။ Settings → Apps → Machine Hub → Permissions → Clipboard allow။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>App နှေးလာရင် ဘယ်လိုလုပ်မလဲ?</summary>
+      <p>
+        1. Settings → Clear Search History<br>
+        2. App close → open<br>
+        3. မရင် — App reinstall (data ပျက်မယ်၊ Excel ပြန် import လုပ်ရမယ်)
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Data backup လုပ်လို့ ရလား?</summary>
+      <p>
+        Excel file ကို သိမ်းထားပါ။ Import လုပ်ခဲ့တဲ့ file က backup အဖြစ် ပြန်လုပ်လို့ရတယ်။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>APK ကို update လုပ်ဖို့ လိုလား?</summary>
+      <p>
+        <strong>မလိုဘူး</strong> — data update က Excel file နဲ့ပဲ လုပ်တယ်။
+        APK ကို update လုပ်ဖို့ လိုတာ — feature အသစ် ထည့်ရင်သာ။
+      </p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Machine Hub (Admin) နဲ့ ဆိုင်လား?</summary>
+      <p>
+        Machine Hub <strong>User</strong> က — offline-only user app။
+        Machine Hub <strong>Admin</strong> က — separate system (server + cloud)။
+        ၂ ခု မတူညီဘူး။ ဒီ app က admin မပါ — user အတွက်ပဲ။
+      </p>
+    </details>
+
+    <!-- Contact -->
+    <h2 class="section-title">📞 အကူအညီ</h2>
+    <div class="help-block">
+      <p style="font-size:14px;color:var(--text-2);line-height:1.7;">
+        ပြဿနာ ရှိရင် ဒီနည်း ၂ မျိုးနဲ့ ဆက်သွယ်ပါ။
+      </p>
+      <a href="/settings.html" class="btn btn-primary" style="width:100%;margin-bottom:8px;">
+        🐛 Bug Report လုပ်ပါ
+      </a>
+      <div class="help-tip">
+        <strong>Or:</strong> Admin / IT ဆီကို တိုက်ရိုက် ဆက်သွယ်ပါ
+      </div>
+    </div>
+
+    <div style="height:60px"></div>
+  </div>
+</div>
+
+
+<!-- Icons sprite -->
+<script src="/static/js/icons.js"></script>
+<script src="/static/js/theme.js"></script>
+
+<!-- SheetJS (Excel) -->
+<script src="/static/vendor/xlsx.full.min.js"></script>
+<!-- QR -->
+<script src="/static/vendor/qrcode.min.js"></script>
+
+<!-- App logic -->
+<script src="/static/js/db.js"></script>
+<script src="/static/js/excel.js"></script>
+<script src="/static/js/search.js"></script>
+<script src="/static/js/settings.js"></script>
+<script src="/static/js/machine.js"></script>
+<script src="/static/js/modal.js"></script>
+
+
+
+<script>
+  // Haptic feedback helper
+  window.MH_HAPTIC = {
+    tap: function () { try { navigator.vibrate && navigator.vibrate(15); } catch (e) {} },
+    light: function () { try { navigator.vibrate && navigator.vibrate(20); } catch (e) {} },
+    medium: function () { try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} },
+    success: function () { try { navigator.vibrate && navigator.vibrate([30, 20, 30]); } catch (e) {} },
+    error: function () { try { navigator.vibrate && navigator.vibrate([60, 40, 60]); } catch (e) {} },
+  };
+</script>
+
+<script>
+  // Register service worker (PWA offline)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/static/service-worker.js', { scope: '/' })
+        .then(function (r) { console.log('[PWA]', r.scope); })
+        .catch(function (e) { console.warn('[PWA]', e); });
+    });
+  }
+
+  // PWA install prompt
+  window.MH_INSTALL = (function () {
+    var deferredPrompt = null;
+    var bannerEl = null;
+    var DISMISS_KEY = 'mh_install_dismissed';
+
+    function isDismissed() {
+      try { return localStorage.getItem(DISMISS_KEY) === '1'; } catch (e) { return false; }
+    }
+    function dismiss() {
+      try { localStorage.setItem(DISMISS_KEY, '1'); } catch (e) {}
+      if (bannerEl) bannerEl.remove();
+    }
+
+    function showBanner() {
+      if (isDismissed()) return;
+      if (document.getElementById('pwa-install-banner')) return;
+      if (window.matchMedia('(display-mode: standalone)').matches) return;
+
+      bannerEl = document.createElement('div');
+      bannerEl.id = 'pwa-install-banner';
+      bannerEl.className = 'pwa-banner';
+      bannerEl.innerHTML =
+        '<div class="pwa-banner-icon">📱</div>' +
+        '<div class="pwa-banner-text">' +
+        '<div class="pwa-banner-title">Home Screen မှာ ထည့်ပါ</div>' +
+        '<div class="pwa-banner-sub">App လို သုံးလို့ရမယ်</div>' +
+        '</div>' +
+        '<button type="button" class="pwa-banner-install" id="pwa-install">Install</button>' +
+        '<button type="button" class="pwa-banner-close" id="pwa-close">×</button>';
+
+      document.body.appendChild(bannerEl);
+
+      document.getElementById('pwa-install').addEventListener('click', function () {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function (choice) {
+          console.log('[PWA]', choice.outcome);
+          deferredPrompt = null;
+          dismiss();
+        });
+      });
+
+      document.getElementById('pwa-close').addEventListener('click', dismiss);
+
+      // Auto-hide after 20 sec
+      setTimeout(function () {
+        if (bannerEl && bannerEl.parentNode) dismiss();
+      }, 20000);
+    }
+
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Show after 3 sec
+      setTimeout(showBanner, 3000);
+    });
+
+    window.addEventListener('appinstalled', function () {
+      console.log('[PWA] installed');
+      dismiss();
+    });
+
+    return {
+      show: showBanner,
+      dismiss: dismiss,
+      canInstall: function () { return !!deferredPrompt; },
+    };
+  })();
+</script>
+
+</body>
+</html>
