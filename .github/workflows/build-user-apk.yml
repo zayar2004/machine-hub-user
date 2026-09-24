@@ -37,13 +37,17 @@ jobs:
         run: npx cap sync android
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        run: |
+          # Use pre-installed Android SDK on ubuntu-latest runner
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          ls -la $ANDROID_HOME 2>/dev/null || ls -la /usr/local/lib/android/sdk 2>/dev/null || echo "SDK path not found"
 
       - name: Build APK (debug)
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
