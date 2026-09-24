@@ -29,6 +29,13 @@
         </button>
       </div>
 
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button type="button" class="btn-star" id="m-fav" aria-label="Favorite" style="flex:1;width:auto;gap:6px;">
+          <svg class="icon"><use href="#i-star"/></svg>
+          <span style="font-size:13px;font-weight:600;">Favorite</span>
+        </button>
+      </div>
+
       <!-- Info cards -->
       <div class="info-grid">
         <div class="info-row">
@@ -64,6 +71,8 @@
       <div style="color:var(--text-3);font-size:13px;">Data import လုပ်ထားပါသလား?</div>
     </div>
   </div>
+
+  {% include "partials/share_modal.html" %}
 
   <div class="toast" id="toast" hidden></div>
 </div>

@@ -110,7 +110,8 @@
     }).then(function (result) {
       clearTimeout(safety);
       hideOverlay();
-      showToast('✅ Import OK — ' + result.records.length);
+      var skip = (result.invalid || 0) + (result.duplicate || 0);
+        showToast('✅ Import OK — ' + result.records.length + (skip > 0 ? ' (' + skip + ' skipped)' : ''));
       refreshData();
     }).catch(function (err) {
       clearTimeout(safety);

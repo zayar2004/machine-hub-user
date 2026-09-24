@@ -1,0 +1,29 @@
+<!-- Share Modal -->
+<div class="mh-modal" id="share-modal" hidden>
+  <div class="mh-modal-card" style="max-width:420px;">
+    <div class="mh-modal-icon info" style="background:var(--accent-soft);color:var(--accent-light);">
+      🔗
+    </div>
+    <h2 class="mh-modal-title">Share Machine</h2>
+    <p class="mh-modal-desc" id="share-summary">—</p>
+
+    <div class="qr-box" id="qr-box">
+      <div id="qr-code"></div>
+    </div>
+
+    <div class="share-actions">
+      <button type="button" class="btn btn-ghost" id="share-copy">
+        <svg class="icon"><use href="#i-copy"/></svg>
+        Copy Text
+      </button>
+      <button type="button" class="btn btn-primary" id="share-native">
+        <svg class="icon"><use href="#i-share"/></svg>
+        Share
+      </button>
+    </div>
+
+    <button type="button" class="btn btn-ghost btn-lg" id="share-close" style="margin-top:8px;">
+      Close
+    </button>
+  </div>
+</div>

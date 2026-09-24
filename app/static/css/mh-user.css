@@ -961,3 +961,114 @@ a { color: inherit; text-decoration: none; }
   background: var(--surface-3);
   border-top: 1px solid var(--border);
 }
+
+/* ==================== STAR / FAVORITE ==================== */
+.btn-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  flex-shrink: 0;
+}
+.btn-star:hover {
+  color: var(--warning);
+  border-color: var(--warning);
+}
+.btn-star.active {
+  background: var(--warning-soft);
+  color: var(--warning);
+  border-color: var(--warning);
+}
+.btn-star .icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+}
+.btn-star.active .icon {
+  fill: currentColor;
+}
+
+.result-card {
+  position: relative;
+}
+.result-card .btn-star-float {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+}
+
+.favorite-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-2);
+  cursor: pointer;
+  transition: all var(--t-fast);
+  text-decoration: none;
+  color: inherit;
+}
+.favorite-item:hover {
+  border-color: var(--accent);
+  background: var(--surface-3);
+}
+.favorite-item .icon-star {
+  color: var(--warning);
+  flex-shrink: 0;
+}
+.favorite-item .icon-star .icon {
+  fill: currentColor;
+  stroke: currentColor;
+}
+.favorite-item-text {
+  flex: 1;
+  min-width: 0;
+}
+.favorite-item-code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--accent-light);
+  word-break: break-all;
+}
+.favorite-item-name {
+  font-size: var(--fs-xs);
+  color: var(--text-3);
+}
+
+/* ==================== SHARE MODAL ==================== */
+.qr-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: #ffffff;
+  border-radius: var(--r-md);
+  margin-bottom: var(--s-4);
+  min-height: 220px;
+}
+.qr-box img,
+.qr-box canvas {
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+.share-actions {
+  display: flex;
+  gap: var(--s-2);
+  margin-bottom: var(--s-2);
+}
+.share-actions .btn {
+  flex: 1;
+}

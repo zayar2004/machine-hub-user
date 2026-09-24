@@ -64,6 +64,21 @@
     $('#m-copy').addEventListener('click', function () { copyText(record.machine_code); });
     $('#m-copy-2').addEventListener('click', function () { copyText(record.machine_code); });
 
+    // Favorite toggle
+    var favBtn = document.getElementById('m-fav');
+    if (favBtn && window.MH_DB) {
+      window.MH_DB.isFavorite(record.machine_code).then(function (isFav) {
+        if (isFav) favBtn.classList.add('active');
+      });
+      favBtn.addEventListener('click', function () {
+        window.MH_DB.toggleFavorite(record).then(function (nowFav) {
+          favBtn.classList.toggle('active', nowFav);
+          showToast(nowFav ? '⭐ Added to favorites' : 'Removed from favorites');
+          try { if (navigator.vibrate) navigator.vibrate(30); } catch (e) {}
+        });
+      });
+    }
+
     var shareBtn = $('#m-share');
     if (shareBtn) {
       shareBtn.addEventListener('click', function () {

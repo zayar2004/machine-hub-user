@@ -3,7 +3,7 @@
   'use strict';
 
   var DB_NAME = 'mh_user';
-  var DB_VERSION = 1;
+  var DB_VERSION = 2;
   var STORE_MACHINES = 'machines';
   var STORE_META = 'meta';
 
@@ -23,6 +23,9 @@
         }
         if (!db.objectStoreNames.contains(STORE_META)) {
           db.createObjectStore(STORE_META, { keyPath: 'key' });
+        }
+        if (!db.objectStoreNames.contains('favorites')) {
+          db.createObjectStore('favorites', { keyPath: 'machine_code' });
         }
       };
       req.onsuccess = function () {
@@ -104,6 +107,65 @@
     });
   }
 
+  function toggleFavorite(record) {
+    return tx('favorites', 'readwrite').then(function (store) {
+      return new Promise(function (resolve, reject) {
+        var req = store.get(record.machine_code);
+        req.onsuccess = function () {
+          if (req.result) {
+            var del = store.delete(record.machine_code);
+            del.onsuccess = function () { resolve(false); };
+            del.onerror = function () { reject(del.error); };
+          } else {
+            var put = store.put({
+              machine_code: record.machine_code,
+              machine_name: record.machine_name || record.machine_code,
+              shop_code: record.shop_code || '',
+              added_at: Date.now(),
+            });
+            put.onsuccess = function () { resolve(true); };
+            put.onerror = function () { reject(put.error); };
+          }
+        };
+        req.onerror = function () { reject(req.error); };
+      });
+    });
+  }
+
+  function isFavorite(code) {
+    return tx('favorites', 'readonly').then(function (store) {
+      return new Promise(function (resolve, reject) {
+        var req = store.get(code);
+        req.onsuccess = function () { resolve(!!req.result); };
+        req.onerror = function () { reject(req.error); };
+      });
+    });
+  }
+
+  function listFavorites() {
+    return tx('favorites', 'readonly').then(function (store) {
+      return new Promise(function (resolve, reject) {
+        var req = store.getAll();
+        req.onsuccess = function () {
+          var list = req.result || [];
+          list.sort(function (a, b) { return (b.added_at || 0) - (a.added_at || 0); });
+          resolve(list);
+        };
+        req.onerror = function () { reject(req.error); };
+      });
+    });
+  }
+
+  function favoritesCount() {
+    return tx('favorites', 'readonly').then(function (store) {
+      return new Promise(function (resolve, reject) {
+        var req = store.count();
+        req.onsuccess = function () { resolve(req.result); };
+        req.onerror = function () { reject(req.error); };
+      });
+    });
+  }
+
   window.MH_DB = {
     open: open,
     putAll: putAll,
@@ -112,6 +174,10 @@
     getAll: getAll,
     setMeta: setMeta,
     getMeta: getMeta,
+    toggleFavorite: toggleFavorite,
+    isFavorite: isFavorite,
+    listFavorites: listFavorites,
+    favoritesCount: favoritesCount,
   };
 
   console.log('[MH_DB] loaded');

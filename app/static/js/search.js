@@ -8,6 +8,10 @@
 
   function $(sel) { return document.querySelector(sel); }
 
+  function vibrate(ms) {
+    try { if (navigator.vibrate) navigator.vibrate(ms); } catch (e) {}
+  }
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
@@ -55,6 +59,32 @@
     list.unshift(q);
     try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX))); }
     catch (e) {}
+  }
+
+  function renderFavorites() {
+    var el = $('#favorites-list');
+    var section = $('#favorites-section');
+    if (!el || !section || !window.MH_DB.listFavorites) return;
+    window.MH_DB.listFavorites().then(function (list) {
+      if (!list.length) {
+        section.hidden = true;
+        return;
+      }
+      section.hidden = false;
+      var top = list.slice(0, 5);
+      el.innerHTML = top.map(function (f) {
+        return '<a href="/machine/' + encodeURIComponent(f.machine_code) + '" class="favorite-item">' +
+          '<span class="icon-star"><svg class="icon"><use href="#i-star"/></svg></span>' +
+          '<div class="favorite-item-text">' +
+          '<div class="favorite-item-code">' + esc(f.machine_code) + '</div>' +
+          (f.machine_name && f.machine_name !== f.machine_code
+            ? '<div class="favorite-item-name">' + esc(f.machine_name) + '</div>'
+            : '') +
+          '</div>' +
+          '<svg class="icon" style="color:var(--text-4);"><use href="#i-chevron-right"/></svg>' +
+          '</a>';
+      }).join('');
+    }).catch(function (err) { console.warn('[Fav]', err); });
   }
 
   function renderRecent() {
@@ -125,16 +155,58 @@
       '<div class="result-count">' + results.length + ' ခု တွေ့ပါ</div>' +
       results.map(function (r) {
         return '<div class="result-card" data-code="' + esc(r.machine_code) + '">' +
+          '<button type="button" class="btn-star btn-star-float" data-fav="' + esc(r.machine_code) + '" aria-label="Favorite">' +
+          '<svg class="icon"><use href="#i-star"/></svg></button>' +
           '<div class="result-code">' + esc(r.machine_code) + '</div>' +
           '<div class="result-name">' + esc(r.machine_name) + '</div>' +
           (r.shop_code ? '<div class="result-shop">' + esc(r.shop_code) + '</div>' : '') +
           '<div class="result-actions">' +
           '<button type="button" class="btn-copy" data-copy="' + esc(r.machine_code) + '">' +
-          '<svg class="icon"><use href="#i-copy"/></svg> Copy Code</button>' +
+          '<svg class="icon"><use href="#i-copy"/></svg> Copy</button>' +
+          '<button type="button" class="btn-copy" data-share="' + esc(r.machine_code) + '">' +
+          '<svg class="icon"><use href="#i-share"/></svg> Share</button>' +
           '<a href="/machine/' + encodeURIComponent(r.machine_code) + '" class="btn-copy" style="text-decoration:none;">' +
-          '<svg class="icon"><use href="#i-arrow-right"/></svg> Details</a>' +
+          '<svg class="icon"><use href="#i-arrow-right"/></svg></a>' +
           '</div></div>';
       }).join('');
+
+    // Bind share buttons
+    el.querySelectorAll('[data-share]').forEach(function (b) {
+      var code = b.getAttribute('data-share');
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var rec = results.find(function (x) { return x.machine_code === code; });
+        if (!rec) return;
+        var text = rec.machine_code +
+          (rec.machine_name && rec.machine_name !== rec.machine_code ? ' — ' + rec.machine_name : '') +
+          (rec.shop_code ? ' (' + rec.shop_code + ')' : '');
+        if (navigator.share) {
+          navigator.share({ title: 'Machine', text: text }).catch(function () {});
+        } else {
+          copyText(text);
+        }
+      });
+    });
+
+    // Bind star buttons
+    el.querySelectorAll('[data-fav]').forEach(function (b) {
+      var code = b.getAttribute('data-fav');
+      // Check current state
+      window.MH_DB.isFavorite(code).then(function (isFav) {
+        if (isFav) b.classList.add('active');
+      });
+      b.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var rec = results.find(function (x) { return x.machine_code === code; });
+        if (!rec) return;
+        window.MH_DB.toggleFavorite(rec).then(function (nowFav) {
+          b.classList.toggle('active', nowFav);
+          showToast(nowFav ? '⭐ Added to favorites' : 'Removed from favorites');
+          if (typeof vibrate === 'function') vibrate(30);
+          renderFavorites();
+        });
+      });
+    });
 
     el.querySelectorAll('[data-copy]').forEach(function (b) {
       b.addEventListener('click', function (e) {
@@ -243,11 +315,19 @@
       return;
     }
 
-    // Fill summary
+    // Fill summary — with error details
     var summary = document.getElementById('preview-summary');
     if (summary) {
-      var invalidTxt = result.invalid > 0 ? ' (' + result.invalid + ' invalid skipped)' : '';
-      summary.innerHTML = '<strong>' + result.records.length + ' machines</strong> ready to import' + invalidTxt;
+      var lines = [];
+      lines.push('<strong style="color:var(--success);">✓ ' + result.records.length + ' machines</strong> ready');
+      if (result.invalid > 0) {
+        lines.push('<span style="color:var(--warning);">⚠ ' + result.invalid + ' rows skipped (empty code)</span>');
+      }
+      if (result.duplicate > 0) {
+        lines.push('<span style="color:var(--warning);">⚠ ' + result.duplicate + ' duplicates skipped</span>');
+      }
+      lines.push('<span style="color:var(--text-3);font-size:11px;">' + result.totalRows + ' total rows</span>');
+      summary.innerHTML = lines.join('<br>');
     }
 
     // Fill table (first 5)
@@ -351,7 +431,10 @@
       clearTimeout(safety);
       setTimeout(function () {
         hideOverlay();
-        showToast('✅ Import OK — ' + result.records.length + ' machines');
+        var msg = '✅ Import OK — ' + result.records.length + ' machines';
+        var skipped = (result.invalid || 0) + (result.duplicate || 0);
+        if (skipped > 0) msg += ' (' + skipped + ' skipped)';
+        showToast(msg);
         refreshUI();
       }, 400);
     }).catch(function (err) {
@@ -386,6 +469,7 @@
       else el.textContent = '· ' + Math.floor(age / 60) + ' hr ago';
     });
     renderRecent();
+    renderFavorites();
   }
 
   function bindUI() {

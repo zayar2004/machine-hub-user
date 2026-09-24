@@ -40,22 +40,31 @@
     var out = [];
     var seen = {};
     var invalid = 0;
+    var duplicate = 0;
+    var invalidSamples = [];
+    var duplicateSamples = [];
 
-    rows.forEach(function (raw) {
+    rows.forEach(function (raw, idx) {
       var r = normalizeRow(raw);
       var code = String(r.machine_code || '').trim();
-      // Fallback: use code as name if machine_name missing
       var name = String(r.machine_name || '').trim() || code;
-      // Fallback: location → shop_code
       var shop = String(r.shop_code || r.location || '').trim();
-      // Fallback: description from any remaining column
       var desc = String(r.description || r.arrival_date || '').trim();
 
       if (!code) {
         invalid++;
+        if (invalidSamples.length < 5) {
+          invalidSamples.push({ row: idx + 2 });  // +2 (1-index + header)
+        }
         return;
       }
-      if (seen[code]) return;
+      if (seen[code]) {
+        duplicate++;
+        if (duplicateSamples.length < 5) {
+          duplicateSamples.push({ row: idx + 2, code: code });
+        }
+        return;
+      }
       seen[code] = true;
 
       out.push({
@@ -68,7 +77,14 @@
       });
     });
 
-    return { records: out, invalid: invalid };
+    return {
+      records: out,
+      invalid: invalid,
+      duplicate: duplicate,
+      invalidSamples: invalidSamples,
+      duplicateSamples: duplicateSamples,
+      totalRows: rows.length,
+    };
   }
 
   window.MH_EXCEL = {
