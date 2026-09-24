@@ -32,7 +32,7 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install Flask==3.0.3 Flask-WTF==1.2.1 WTForms==3.1.2 openpyxl
+          pip install -r requirements.txt
 
       - name: Build www/
         run: |
