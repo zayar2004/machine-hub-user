@@ -42,19 +42,7 @@
     <!-- Greeting -->
     <div class="greeting" id="greeting">
       <div class="greeting-title">မင်္ဂလာပါ 👋</div>
-      <div class="greeting-sub">ရှာဖွေရန် စာရိုက်ပါ — Code / Name / Shop</div>
-    </div>
-
-    <!-- Tips banner -->
-    <div class="info-banner">
-      <span style="font-size:18px;flex-shrink:0;">💡</span>
-      <div style="flex:1;min-width:0;">
-        <strong style="color:var(--text);">Tips:</strong>
-        <span style="color:var(--text-2);">Partial code ရိုက်ရင် ပိုမြန်တယ်</span>
-        <div style="font-size:11px;color:var(--text-3);margin-top:2px;">
-          ဥပမာ — "Dream" ရိုက် → Dream Castle တွေ့
-        </div>
-      </div>
+      <div class="greeting-sub">Machine Code ရှာဖွေပါ</div>
     </div>
 
     <!-- Search box -->
@@ -76,32 +64,27 @@
 
     <!-- Favorites -->
     <div id="favorites-section">
-      <div class="section-header">
-        <h2 class="section-title">Favorites ⭐</h2>
-        <span class="section-sub">အသုံးများတဲ့ machines</span>
-      </div>
+      <h2 class="section-title">Favorites ⭐</h2>
       <div id="favorites-list"></div>
     </div>
 
     <!-- Recent (shown when no query) -->
     <div id="recent-section">
-      <div class="section-header">
-        <h2 class="section-title">Recent Searches</h2>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <h2 class="section-title" style="margin-bottom:0;">Recent Searches</h2>
         <button type="button" class="link-btn" id="btn-clear-recent" style="font-size:11px;">Clear All</button>
       </div>
-      <div class="section-sub" style="margin-top:-4px;margin-bottom:10px;">မကြာမီ ရှာခဲ့တာ</div>
-      <div id="recent-list" class="recent-list"></div>
+      <div id="recent-list" class="recent-list" style="margin-top:12px;"></div>
     </div>
 
     <!-- Quick actions -->
     <div id="quick-actions">
       <h2 class="section-title">Quick Actions</h2>
-
       <button type="button" class="action-card" id="btn-action-reimport">
         <svg class="icon action-icon"><use href="#i-upload"/></svg>
         <div class="action-text">
           <div class="action-title">Re-import Excel</div>
-          <div class="action-sub">Excel file အသစ် — data update</div>
+          <div class="action-sub">Update machine data</div>
         </div>
         <svg class="icon action-arrow"><use href="#i-chevron-right"/></svg>
       </button>
@@ -111,16 +94,7 @@
         <svg class="icon action-icon"><use href="#i-settings"/></svg>
         <div class="action-text">
           <div class="action-title">Settings</div>
-          <div class="action-sub">Theme · Font · Data · Stats</div>
-        </div>
-        <svg class="icon action-arrow"><use href="#i-chevron-right"/></svg>
-      </a>
-
-      <a href="/help" class="action-card">
-        <svg class="icon action-icon"><use href="#i-help"/></svg>
-        <div class="action-text">
-          <div class="action-title">Help Center</div>
-          <div class="action-sub">အသုံးပြုနည်း အပြည့်အစုံ</div>
+          <div class="action-sub">Theme, data, about</div>
         </div>
         <svg class="icon action-arrow"><use href="#i-chevron-right"/></svg>
       </a>
@@ -128,13 +102,8 @@
 
     <!-- Stats -->
     <div class="stats">
-      <div>
-        <strong id="stats-count" style="color:var(--text);font-weight:700;">—</strong>
-      </div>
-      <span id="stats-last" style="font-size:11px;"></span>
-    </div>
-    <div class="privacy-hint">
-      🔒 Data က ဖုန်းထဲမှာပဲ — server မလိုဘူး
+      <span id="stats-count">—</span>
+      <span id="stats-last"></span>
     </div>
   </section>
 

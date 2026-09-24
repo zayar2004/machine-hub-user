@@ -25,6 +25,11 @@ def machine_detail(code):
     return render_template("machine_detail.html", machine_code=code)
 
 
+@bp.route("/help")
+def help_center():
+    return render_template("help.html")
+
+
 @bp.route("/help/format")
 def format_help():
     return render_template("format_help.html")
